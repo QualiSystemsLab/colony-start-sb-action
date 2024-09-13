@@ -17,7 +17,11 @@ if [ "$TIMEOUT" -gt 0 ]; then
     params="$params -w -t ${TIMEOUT}"
 fi
 if [ ! -z "${INPUTS}" ]; then
-    params="$params -i \"${INPUTS}\""
+    IFS=',' # Set comma as the internal field separator
+    for input in ${INPUTS}; do
+        params="$params -i \"${input}\""
+    done
+    unset IFS # Reset IFS to default
 fi
 if [ ! -z "${BRANCH}" ]; then
     params="$params -b \"${BRANCH}\""
