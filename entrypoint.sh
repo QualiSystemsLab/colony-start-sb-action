@@ -25,7 +25,7 @@ fi
 
 
  
-command="torque-cli env start ${params} --detail"
+command="torque-cli.exe env start ${params} --detail"
 echo "The following command will be executed: ${command}"
 
 echo "Starting the environment..."
@@ -34,7 +34,7 @@ response=$(eval $command) || exit 1
 environment_id=$(echo "$response" | tr -d '"')
 echo "Started environment with id '${environment_id}'"
 
-response=$(torque env get ${environment_id} --detail) || exit 1
+response=$(torque-cli.exe env get ${environment_id} --detail) || exit 1
 environment_details=$(echo "$response" | tr -d "\n")
 
 echo "Writing data to outputs"
