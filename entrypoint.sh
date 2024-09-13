@@ -11,7 +11,7 @@ INPUTS="$7"
 ENV_NAME="${ENV_NAME:-$BP_NAME-build-$GITHUB_RUN_NUMBER}"
 
 echo "Running torque start environment command"
-params="\"${BP_NAME}\" --repo \"${REPO_NAME}\" -n \"${ENV_NAME}\" -d \"${DURATION}\""
+params="\"${BP_NAME}\" -s 03-Live --name \"${ENV_NAME}\" -d \"${DURATION}\""
 
 if [ "$TIMEOUT" -gt 0 ]; then
     params="$params -w -t ${TIMEOUT}"
@@ -23,7 +23,9 @@ if [ ! -z "${BRANCH}" ]; then
     params="$params -b \"${BRANCH}\""
 fi
 
-command="torque --disable-version-check env start ${params} --output=json"
+
+ 
+command="torque-cli env start ${params} --detail"
 echo "The following command will be executed: ${command}"
 
 echo "Starting the environment..."
@@ -32,7 +34,7 @@ response=$(eval $command) || exit 1
 environment_id=$(echo "$response" | tr -d '"')
 echo "Started environment with id '${environment_id}'"
 
-response=$(torque --disable-version-check env get ${environment_id} --output=json --detail) || exit 1
+response=$(torque env get ${environment_id} --detail) || exit 1
 environment_details=$(echo "$response" | tr -d "\n")
 
 echo "Writing data to outputs"
